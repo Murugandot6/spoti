@@ -6,7 +6,7 @@ import { useMemo } from "react"
 
 const MOCK_RADIO_SONGS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16];
 
-const Suggestion = ({ radioTracks, radio, songs, isFetching, error, blacklist, favorites }) => {
+const Suggestion = ({ radioTracks, radio, songs, isFetching, error, blacklist, favorites, suggestionTitle }) => {
     const tracks = useMemo(() => radioTracks?.slice(0, 15), [radioTracks]);
 
     function addToQueue() {
@@ -17,7 +17,7 @@ const Suggestion = ({ radioTracks, radio, songs, isFetching, error, blacklist, f
 
     return (
         <div>
-            <h3 className="mt-4 text-white text-xl font-bold">Suggestions</h3>
+            <h3 className="mt-4 text-white text-xl font-bold">English Most Played Songs</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-14 lg:gap-6 mt-4">
                 <div className="grid gap-2 md:gap-4 grid-cols-5 grid-rows-3 aspect-square">
                     {
@@ -31,7 +31,7 @@ const Suggestion = ({ radioTracks, radio, songs, isFetching, error, blacklist, f
                                     className="col-span-2 row-span-2 relative rounded-xl overflow-hidden aspect-square flex flex-col justify-center items-center font-bold text-3xl bg-black/50 text-white p-2"
                                 >
                                     <img src={radio?.image?.[1]?.link || radio?.image?.[0]?.link} alt="" className="absolute w-full h-full blur-md" /> {/* Use Saavn image links */}
-                                    <p className="relative">Top Mix</p>
+                                    <p className="relative">{suggestionTitle}</p>
                                 </div>
                                 {
                                     tracks?.map(

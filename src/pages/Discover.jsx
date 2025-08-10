@@ -12,19 +12,11 @@ const Discover = () => {
     const { data: topSongsData, isFetching: isFetchingTopSongs, error: errorFetchingTopSongs } = useSearchSongsQuery('tamil latest songs');
     const topTracks = useMemo(() => topSongsData ? getData({ data: topSongsData.data.results.slice(0, 6), type: 'tracks' }) : [], [topSongsData, library]);
     
-    // Saavn API doesn't have direct "top artists", "recent albums", "top radios" endpoints like Deezer.
-    // We will simplify these sections or remove them for now.
-    // For "Popular Artists", we can search for popular artists and display their top songs.
-    // For "Recent Albums", we can search for "new releases" and display as songs.
-    // For "Popular Radios", we can search for "radio hits" or similar.
+    // Fetch data for English most played songs
+    const { data: englishSongsData, isFetching: isFetchingEnglishSongs, error: errorFetchingEnglishSongs } = useSearchSongsQuery('english most played songs');
+    const englishMostPlayedSongs = useMemo(() => englishSongsData ? getData({ data: englishSongsData.data.results.slice(0, 15), type: 'tracks' }) : [], [englishSongsData, library]);
 
-    // For simplicity, let's just show a general list of popular songs and a "suggestion" based on a generic search.
-    // The "Suggestion" component currently uses radio data, which is not directly available.
-    // We'll adapt it to use a generic "top mix" of songs.
-
-    const { data: radioSongsData, isFetching: fetchingRadioTracks, error: errorFetchingRadioTracks } = useSearchSongsQuery('top mix');
-    const topRadioSongs = useMemo(() => radioSongsData ? getData({ data: radioSongsData.data.results.slice(0, 15), type: 'tracks' }) : [], [radioSongsData, library]);
-    const topRadioPlaceholder = useMemo(() => ({ id: 'top_mix', name: 'Top Mix', image: [{ link: 'https://i.pinimg.com/originals/ed/54/d2/ed54d2fa700d36d4f2671e1be84651df.jpg' }] }), []); // Placeholder for radio image
+    const englishMostPlayedPlaceholder = useMemo(() => ({ id: 'english_mix', name: 'English Most Played', image: [{ link: 'https://i.pinimg.com/originals/ed/54/d2/ed54d2fa700d36d4f2671e1be84651df.jpg' }] }), []); // Placeholder for radio image
 
     useEffect(() => {   
         document.getElementById('site_title').innerText = 'Isai - Web Player: Rhythm for everyone.'
@@ -43,11 +35,12 @@ const Discover = () => {
             </Songs>
 
             <Suggestion
-                isFetching={fetchingRadioTracks}
-                error={errorFetchingRadioTracks}
-                radioTracks={topRadioSongs}
-                radio={topRadioPlaceholder} // Use placeholder radio data
-                songs={topTracks} // Re-use topTracks for suggestions
+                isFetching={isFetchingEnglishSongs}
+                error={errorFetchingEnglishSongs}
+                radioTracks={englishMostPlayedSongs}
+                radio={englishMostPlayedPlaceholder} // Use placeholder radio data
+                songs={englishMostPlayedSongs} // Use English songs for suggestions column
+                suggestionTitle="English Most Played"
             />
         </div>
     )
