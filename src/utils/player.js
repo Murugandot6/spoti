@@ -1,6 +1,7 @@
 import { playPause, prevSong, nextSong, setActiveSong, setAlbum, stop, shuffleOn, shuffleOff, setRepeat, addToUpNext } from "../redux/features/playerSlice"
 import { store } from '../redux/store';
 import { displayMessage } from "./prompt"
+import { getSingleData } from "./getData"; // Import getSingleData
 
 export function play() {
     store.dispatch(playPause(true));
@@ -50,7 +51,15 @@ export const playSongs = ({ tracks, song, i, album}) => {
         displayMessage('No tracks to play.');
         return;
     }
-    store.dispatch(setActiveSong({ tracks, song, i }));
+
+    // Get current library state for data normalization
+    const { library } = store.getState();
+    const { favorites, blacklist } = library;
+
+    // Normalize the song data before setting it as activeSong
+    const normalizedSong = getSingleData({ type: 'tracks', data: song, favorites, blacklist });
+
+    store.dispatch(setActiveSong({ tracks, song: normalizedSong, i })); // Pass normalizedSong
     if (album) store.dispatch(setAlbum(album));
     play();
 }
