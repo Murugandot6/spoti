@@ -9,7 +9,7 @@ const Discover = () => {
     const library = useSelector(state => state.library);
 
     // Use Saavn search for general "top songs" or "trending"
-    const { data: topSongsData, isFetching: isFetchingTopSongs, error: errorFetchingTopSongs } = useSearchSongsQuery('trending songs');
+    const { data: topSongsData, isFetching: isFetchingTopSongs, error: errorFetchingTopSongs } = useSearchSongsQuery('tamil latest songs');
     const topTracks = useMemo(() => topSongsData ? getData({ data: topSongsData.data.results.slice(0, 6), type: 'tracks' }) : [], [topSongsData, library]);
     
     // Saavn API doesn't have direct "top artists", "recent albums", "top radios" endpoints like Deezer.
@@ -39,7 +39,7 @@ const Discover = () => {
                 error={errorFetchingTopSongs}
                 songs={topTracks}
             >
-                Popular Songs
+                Tamil Latest Songs
             </Songs>
 
             <Suggestion
