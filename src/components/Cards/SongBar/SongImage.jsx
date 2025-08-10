@@ -1,5 +1,5 @@
 import PlayPause from "../PlayPause"
-import { songImage as defaultSongImage } from '../../assets/images'; // Import default image
+import { songImage as defaultSongImage } from "../../assets/images/index.js"; // Explicitly import from index.js
 
 const SongImage = ({ song, activeSong, isPlaying, handlePlayClick, handlePauseClick }) => {
   const imageUrl = song?.image?.[0]?.link || defaultSongImage; // Use fallback
