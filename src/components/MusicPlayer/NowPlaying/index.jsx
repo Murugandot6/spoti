@@ -2,7 +2,7 @@ import { useState, useRef, useMemo } from "react"
 import ColorThief from 'colorthief'
 
 import { useGetLyricsQuery } from "../../../redux/services/MusixMatchApi"
-import { useGetSongDetailsQuery } from "../../../redux/services/DeezerApi"
+import { useGetSongDetailsByIdQuery } from "../../../redux/services/saavnApi" // Changed from DeezerApi
 
 import QueueAndLyrics from "./QueueAndLyrics"
 import ChangeQueueLyrics from "./ChangeQueueLyrics"
@@ -17,7 +17,7 @@ const NowPlaying = ({ close, open, nowPlaying, activeSong, currentSongs, current
     const [colors, setColors] = useState([]);
     const imgRef = useRef(null);
 
-    const { data: song } = useGetSongDetailsQuery(activeSong.id);
+    const { data: song } = useGetSongDetailsByIdQuery(activeSong.id); // Changed to useGetSongDetailsByIdQuery
     const { data: lyrics, isFetching, error } = useGetLyricsQuery(song?.isrc);
 
     const style = useMemo(() => ({
