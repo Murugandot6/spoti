@@ -8,10 +8,10 @@ const Track = ({ isPlaying, isActive, activeSong, imageRef, onLoad }) => (
     </div>
     <div className="flex-1 max-w-[250px]">
       <p className="truncate text-gray-200 font-bold text-[0.7rem] sm:text-sm">
-        {activeSong?.title ? activeSong?.title : 'No active Song'}
+        {isPlaying ? (activeSong?.title || 'Playing...') : 'No active Song'}
       </p>
       <p className="truncate text-gray-400 font-semibold opacity-80 text-[0.65rem] sm:text-xs">
-        {activeSong?.artist?.name ? activeSong?.artist?.name : 'No active Song'}
+        {isPlaying ? (activeSong?.artist?.name || 'Unknown Artist') : 'No active Song'}
       </p>
     </div>
   </div>
