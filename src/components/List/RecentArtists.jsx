@@ -1,58 +1,16 @@
-import React from 'react'
+import React from 'react';
+import { Error } from '../LoadersAndError';
 
-import { Swiper, SwiperSlide } from 'swiper/react'
-import { FreeMode } from 'swiper'
+const RecentArtists = ({ isFetching, error }) => {
+  if (isFetching) return <div className="h-6 rounded-md w-full max-w-[240px] loading-animation bg-white/5"></div>;
+  if (error) return <Error title="Popular Artists are not available with the current API." />;
 
-import 'swiper/css'
-import 'swiper/css/free-mode'
+  return (
+    <div className="mb-8">
+      <h3 className="text-white font-bold text-xl">Popular artists</h3>
+      <Error title="Popular Artists are not available with the current API." />
+    </div>
+  );
+};
 
-import { ArtistCard } from '../Cards'
-import { Error } from '../LoadersAndError' 
-import SeeMore from './SeeMore'
-
-const RecentArtists = ({ artists, isFetching, error }) => {
-    return (
-        <div>
-        <div className="=mt-4 flex justify-between items-end">
-            <h3 className="text-white font-bold text-xl">Popular artists</h3>
-            <SeeMore link="/charts?type=artists" />
-        </div>
-        {
-            error ?
-            <Error title="Could not load artists" /> :
-            <Swiper
-                slidesPerView="auto"
-                spaceBetween={15}
-                freeMode
-                // centeredSlides
-                // centeredSlidesBounds
-                modules={{FreeMode}}
-                className="mt-3 mb-5 p-[20px] max-w-[95vw] lg:max-w-[calc(100vw-360px)]"
-            >
-                {
-                    isFetching ?
-                    [1, 1, 1, 1, 1, 1, 1, 1].map( (elem, i) => 
-                        <SwiperSlide key={i} style={{width: '150px', height: 'auto'}}>
-                            <div className="rounded-lg bg-white/5 loading-animation p-2">
-                                <div className="rounded-md mb-2 aspect-square bg-black/50"></div>
-                                <div className="h-3 w-[60%] bg-black/50 rounded-md"></div>
-                            </div>
-                        </SwiperSlide> 
-                    ) :
-                    artists?.map( (artist, i) => (
-                    <SwiperSlide
-                        key={artist?.id}
-                        style={{width: '150px', height: 'auto'}}
-                        className="shadow-lg rounded-md animate-slideright transition-colors hover:bg-white/10"
-                    >
-                        <ArtistCard artist={artist} i={i} />
-                    </SwiperSlide>
-                    ) )
-                }
-            </Swiper>
-        }
-        </div>
-    )
-}
-
-export default RecentArtists
+export default RecentArtists;

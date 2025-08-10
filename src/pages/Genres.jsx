@@ -1,22 +1,13 @@
-import { useGetTopGenresQuery } from "../redux/services/DeezerApi"
+import React from 'react';
+import { Link } from 'react-router-dom';
 
-import { Genres } from "../components/List"
-import { useSelector } from "react-redux"
-import { useEffect } from "react"
-
-const GenresPage = () => {
-  const { blacklist, favorites } = useSelector(state => state.library)
-  const { data, isFetching, error } = useGetTopGenresQuery()
-
-  useEffect(() => {
-    document.getElementById('site_title').innerText = 'Isai - Genres'
-  }, [])
-
+const Genres = () => {
   return (
-    <div className="p-4">
-      <Genres blacklist={blacklist} favorites={favorites} genres={data?.data} isFetching={isFetching} error={error}>Genres</Genres>
+    <div className="p-4 flex-1 flex flex-col items-center justify-center gap-4 min-h-[80vh]">
+      <h3 className="text-gray-400 font-bold text-xl">Genres are not available with the current API.</h3>
+      <Link to="/" className="px-4 sm:px-6 h-8 md:h-10 flex items-center justify-center rounded-full border border-white/5 hover:bg-gray-400 text-xs md:text-sm font-bold bg-gray-200 text-black">Go Home</Link>
     </div>
-  )
-}
+  );
+};
 
-export default GenresPage
+export default Genres;

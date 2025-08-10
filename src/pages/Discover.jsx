@@ -1,24 +1,30 @@
 import { useState, useEffect, useMemo } from 'react'
 
-import { useGetRecentReleasesQuery, useGetTopRadiosQuery, useGetTopChartQuery, useGetRadioTracksQuery } from "../redux/services/DeezerApi";
-
 import { useSelector } from "react-redux";
-import { Radios, RecentArtists, RecentAlbums, Suggestion } from "../components/List";
+import { Radios, RecentArtists, RecentAlbums, Suggestion, Songs } from "../components/List"; // Keep Songs for top tracks
 import { getData } from "../utils/getData";
+import { useSearchSongsQuery } from '../redux/services/saavnApi'; // Use Saavn API
 
 const Discover = () => {
     const library = useSelector(state => state.library);
-    // feels like you fell right on my head, gave you a way to the wind, I hope it was worth it anyway, us against the world... if I keep you here I'd only be doing it for myself
 
-    const { data, isFetching: isFetchingTopCharts, error: errorFetchingTopCharts } = useGetTopChartQuery(0);
-    const topTracks = useMemo(() => data ? getData({ data: data.tracks.data.slice(0, 6), type: 'tracks' }) : [], [data, library]);
-    const topArtists = useMemo(() => data ? getData({ data: data.artists.data.slice(0, 10), type: 'artists' }) : [], [data, library]);
+    // Use Saavn search for general "top songs" or "trending"
+    const { data: topSongsData, isFetching: isFetchingTopSongs, error: errorFetchingTopSongs } = useSearchSongsQuery('trending songs');
+    const topTracks = useMemo(() => topSongsData ? getData({ data: topSongsData.data.results.slice(0, 6), type: 'tracks' }) : [], [topSongsData, library]);
     
-    const { data: radios, isFetching, error } = useGetTopRadiosQuery();
-    const topRadio = useMemo(() => radios?.data ? radios.data[1] : { id: 0 }, [radios]);
-    const { data: radio, isFetching: fetchingRadioTracks, error: errorFetchingRadioTracks } = useGetRadioTracksQuery(topRadio.id);
+    // Saavn API doesn't have direct "top artists", "recent albums", "top radios" endpoints like Deezer.
+    // We will simplify these sections or remove them for now.
+    // For "Popular Artists", we can search for popular artists and display their top songs.
+    // For "Recent Albums", we can search for "new releases" and display as songs.
+    // For "Popular Radios", we can search for "radio hits" or similar.
 
-    const { data: recentAlbums, isFetching: isFetchingRecentAlbums, error: errorFetchingRecentAlbums } = useGetRecentReleasesQuery(0);
+    // For simplicity, let's just show a general list of popular songs and a "suggestion" based on a generic search.
+    // The "Suggestion" component currently uses radio data, which is not directly available.
+    // We'll adapt it to use a generic "top mix" of songs.
+
+    const { data: radioSongsData, isFetching: fetchingRadioTracks, error: errorFetchingRadioTracks } = useSearchSongsQuery('top mix');
+    const topRadioSongs = useMemo(() => radioSongsData ? getData({ data: radioSongsData.data.results.slice(0, 15), type: 'tracks' }) : [], [radioSongsData, library]);
+    const topRadioPlaceholder = useMemo(() => ({ id: 'top_mix', name: 'Top Mix', image: [{ link: 'https://i.pinimg.com/originals/ed/54/d2/ed54d2fa700d36d4f2671e1be84651df.jpg' }] }), []); // Placeholder for radio image
 
     useEffect(() => {   
         document.getElementById('site_title').innerText = 'Isai - Web Player: Rhythm for everyone.'
@@ -26,32 +32,23 @@ const Discover = () => {
 
     return (
         <div className="flex flex-col p-4 gap-10 lg:gap-6">
-            <RecentAlbums
-                isFetching={isFetchingRecentAlbums}
-                error={errorFetchingRecentAlbums}
-                albums={recentAlbums?.data}
-            />
+            {/* Removed RecentAlbums, RecentArtists, Radios components as direct data sources are unavailable */}
+            
+            <Songs
+                isFetching={isFetchingTopSongs}
+                error={errorFetchingTopSongs}
+                songs={topTracks}
+            >
+                Popular Songs
+            </Songs>
+
             <Suggestion
                 isFetching={fetchingRadioTracks}
                 error={errorFetchingRadioTracks}
-                radioTracks={radio?.data}
-                radio={topRadio}
-                songs={topTracks}
+                radioTracks={topRadioSongs}
+                radio={topRadioPlaceholder} // Use placeholder radio data
+                songs={topTracks} // Re-use topTracks for suggestions
             />
-            <RecentArtists
-                isFetching={isFetchingTopCharts}
-                error={errorFetchingTopCharts}
-                artists={topArtists}
-            />
-            <Radios 
-                isFetching={isFetching} 
-                error={error} 
-                radios={radios?.data?.slice(0, 5)}
-                showmore={true}
-                genreid={0}
-            >
-                Popular Radios
-            </Radios>
         </div>
     )
 };

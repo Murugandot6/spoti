@@ -1,33 +1,16 @@
-import { useMemo } from 'react';
-import { GenreCard } from '../Cards';
-import { GenreLoading, Error } from '../LoadersAndError';
-import { getData } from '../../utils/getData';
-import { useSelector } from 'react-redux';
+import React from 'react';
+import { Error } from '../LoadersAndError';
 
-const Genres = ({ children, genres, isFetching, error, noFilter }) => {
-  const library = useSelector(state => state.library);
-  const newGenres = useMemo(() => getData({ type: 'genres', data: genres, noFilter }), [library, genres, noFilter]);
+const Genres = ({ children, isFetching, error }) => {
+  if (isFetching) return <div className="h-6 rounded-md w-full max-w-[240px] loading-animation bg-white/5"></div>;
+  if (error) return <Error title="Genres are not available with the current API." />;
 
   return (
     <>
       <h2 className="text-white font-bold text-2xl mb-4">{children}</h2>
-      {
-        isFetching ?
-          <GenreLoading num={10} /> :
-          (
-            error ?
-              <Error title="Could not load genres" /> :
-              <div id="genres" className="grid grid-cols-2 md:grid-cols-3 items-center justify-center gap-6">
-                {
-                  newGenres?.map((genre, i) => (
-                    <GenreCard key={i} genre={genre} i={i} />
-                  ))
-                }
-              </div>
-          )
-      }
+      <Error title="Genres are not available with the current API." />
     </>
-  )
-}
+  );
+};
 
-export default Genres
+export default Genres;

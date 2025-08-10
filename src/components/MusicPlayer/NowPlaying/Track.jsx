@@ -13,7 +13,7 @@ const Track = ({ activeSong, currentSongs, open, duration, appTime, setSeekTime,
 
   return (
     <>
-      <img crossOrigin="anonymous" ref={imgRef} onLoad={handleLoad} src={song?.album?.cover_big} className="aspect-square rounded-sm shadow-lg shadow-black/20 max-h-[350px] lg:row-span-5" />
+      <img crossOrigin="anonymous" ref={imgRef} onLoad={handleLoad} src={song?.image[2]?.link || song?.image[1]?.link || song?.image[0]?.link} className="aspect-square rounded-sm shadow-lg shadow-black/20 max-h-[350px] lg:row-span-5" />
       <div className="flex items-center justify-between gap-3 lg:col-span-4 lg:row-span-2">
         <div className="flex-1 flex flex-col justify-center items-start gap-2" onClick={open}>
           <Link to={`/songs/${song?.id}`}>
@@ -24,7 +24,7 @@ const Track = ({ activeSong, currentSongs, open, duration, appTime, setSeekTime,
           <div className="flex flex-wrap flex-row items-center text-gray-200 text-sm font-semibold">
             <Link to={`/artists/${song?.artist?.id}`}><p className="truncate">{song?.artist?.name}</p></Link>
             <BsDot size={20} />
-            <Link to={`/albums/${song?.album?.id}`}><p className="truncate">{song?.album?.title}</p></Link>
+            <Link to={`/albums/${song?.album?.id}`}><p className="truncate">{song?.album?.name}</p></Link>
           </div>
         </div>
         <FavoriteButton data={song} type="tracks" />

@@ -5,8 +5,9 @@ import { RiPlayListFill, RiPlayListLine } from "react-icons/ri";
 
 export const links = [
   { name: 'Home', to: '/', icon: AiOutlineHome, altIcon: AiFillHome },
-  { name: 'Charts', to: '/charts', icon: BsBarChartLine, altIcon: BsFillBarChartLineFill },
-  { name: 'Genres', to: '/genres', icon: MdOutlineLibraryMusic, altIcon: MdLibraryMusic },
+  // Charts and Genres are removed as they are not directly supported by Saavn API
+  // { name: 'Charts', to: '/charts', icon: BsBarChartLine, altIcon: BsFillBarChartLineFill },
+  // { name: 'Genres', to: '/genres', icon: MdOutlineLibraryMusic, altIcon: MdLibraryMusic },
 ];
 
 export const secondLinks = [
@@ -15,8 +16,7 @@ export const secondLinks = [
 ]
 
 export const categories = [
-  { name: 'album', to: 'albums', desc: "View albums releases toping the charts" },
-  { name: 'artist', to: 'artists', desc: "View artists that are trending right now" },
+  // Categories are simplified as Saavn API primarily returns songs
   { name: 'song', to: 'songs', desc: "View songs that are toping the charts" },
-  { name: 'radio', to: 'radios', desc: "Tune in to the top radio selections" },
-]
+  // 'album', 'artist', 'radio' categories are removed for now
+];

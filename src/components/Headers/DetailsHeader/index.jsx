@@ -25,7 +25,8 @@ const DetailsHeader = () => {
   }
 
   useEffect(() => {
-    setUrl(isFetching ? '' : data?.picture_xl || data?.cover_xl || data?.album?.cover_xl);
+    // Saavn API uses 'image' array for different sizes
+    setUrl(isFetching ? '' : data?.image?.[2]?.link || data?.image?.[1]?.link || data?.image?.[0]?.link);
     updateData({ ...others, colors: isFetching || error ? [] : [bg, text], data, isFetching, error });
   }, [isFetching, data])
 
@@ -49,9 +50,9 @@ const DetailsHeader = () => {
         error ?
         <Error title="Could not load details" /> :
         <>
-              <Header text={text} title={data?.title || data?.name} type={data?.type} />
+              <Header text={text} title={data?.name || data?.title} type={data?.type} /> {/* Saavn uses 'name' for song/artist title */}
         <div className="mx-4 flex flex-row flex-wrap gap-y-2 items-center relative mb-2 ">
-          <Contributors text={text} contributors={data.contributors || []} />
+          <Contributors text={text} contributors={data.artistMap?.artists || []} /> {/* Assuming artistMap for contributors */}
           
           <h3 style={{ color: text }} className="font-bold w-fit flex flex-row items-center text-xs">
             <AlbumInfo data={data} />

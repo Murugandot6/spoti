@@ -2,11 +2,12 @@ import { useSelector } from "react-redux";
 
 import { useParams, useSearchParams } from "react-router-dom";
 
-import { useGetSearchArtistsQuery, useGetSearchAlbumsQuery, useGetSearchSongsQuery } from "../redux/services/DeezerApi";
-import { Artists, Songs, Albums } from "../components/List";
+import { Songs } from "../components/List"; // Only keep Songs for now
 import { useEffect } from "react";
+import { useSearchSongsQuery } from "../redux/services/saavnApi"; // Use Saavn API
 
-const categories = ['All', 'Song', 'Artist', 'Album'];
+// Simplified categories as Saavn API primarily returns songs
+const categories = ['All', 'Song']; 
 
 const Search = () => {
     const { searchTerm } = useParams()
@@ -14,9 +15,14 @@ const Search = () => {
     const [params, setParams] = useSearchParams()
 
     const { blacklist, favorites } = useSelector(state => state.library)
-    const { data: songSearch, isFetching: isFetchingSong, error: errorFetchingSong } = useGetSearchSongsQuery( searchTerm )
-    const { data: albumSearch, isFetching: isFetchingAlbum, error: errorFetchingAlbum } = useGetSearchAlbumsQuery( searchTerm )
-    const { data: artistSearch, isFetching: isFetchingArtist, error: errorFetchingArtist } = useGetSearchArtistsQuery( searchTerm )
+    // Use a single search endpoint for all categories and filter client-side
+    const { data: searchResults, isFetching, error } = useSearchSongsQuery( searchTerm )
+
+    const filteredSongs = searchResults?.data?.results?.filter(item => {
+        const categoryParam = params.get('cat');
+        if (categoryParam === 'Song' && item.type !== 'song') return false; // Assuming Saavn results have a 'type' field
+        return true;
+    }) || [];
 
     useEffect(() => {
         const text = `Isai Search results for - ${searchTerm}`
@@ -30,54 +36,20 @@ const Search = () => {
                     categories.map((category, i) => (
                         <li
                             key={i}
-                            className={`rounded-[18px] flex items-center justify-center px-2 md:px-3 h-[28px] min-w-[60px] md:h-[32px] text-xs sm:text-sm hover:text-gray-100 border border-white/10 ${params.get('cat') == category || (!['Song', 'Artist', 'Album'].includes(params.get('cat')) && category == 'All') ? 'bg-white text-black' : 'bg-white/5 hover:bg-white/10'}`}
+                            className={`rounded-[18px] flex items-center justify-center px-2 md:px-3 h-[28px] min-w-[60px] md:h-[32px] text-xs sm:text-sm hover:text-gray-100 border border-white/10 ${params.get('cat') == category || (!['Song'].includes(params.get('cat')) && category == 'All') ? 'bg-white text-black' : 'bg-white/5 hover:bg-white/10'}`}
                         >
                             <button onClick={() => setParams({ 'cat': category })}>{category}</button>
                         </li>
                     ))
                 }
             </ul>
-            {
-                (params.get('cat') != 'Artist' && params.get('cat') != 'Album') &&
-                <Songs songs={songSearch?.data || []} isFetching={isFetchingSong} error={errorFetchingSong} blacklist={blacklist} favorites={favorites}>
-                    {
-                        !/(song|artist|album)/i.test(params.get('cat')) ?
-                            <span>
-                                            
-                                <span className="text-gray-400 text-sm md:text-base">Song results for </span>
-                                <span className="text-gray-100 text-sm md:text-base">{searchTerm}</span>
-                            </span> :
-                            null
-                    }
-                </Songs>
-            }
-            {
-                (params.get('cat') != 'Artist' && params.get('cat') != 'Song') &&
-                <Albums albums={albumSearch?.data || []} isFetching={isFetchingAlbum} error={errorFetchingAlbum} blacklist={blacklist} favorites={favorites}>
-                    {
-                        !/(song|artist|album)/i.test(params.get('cat')) ?
-                            <span>
-                                <span className="text-gray-400 text-sm md:text-base">Album results for </span>
-                                <span className="text-gray-100 text-sm md:text-base">{searchTerm}</span>
-                            </span> :
-                            null
-                    }
-                </Albums>
-            }
-            {
-                (params.get('cat') != 'Song' && params.get('cat') != 'Album') &&
-                <Artists artists={artistSearch?.data || []} isFetching={isFetchingArtist} error={errorFetchingArtist} blacklist={blacklist} favorites={favorites}>
-                    {
-                        !/(song|artist|album)/i.test(params.get('cat')) ?
-                            <span>
-                                    
-                                <span className="text-gray-400 text-sm md:text-base">Artist results for </span>
-                                <span className="text-gray-100 text-sm md:text-base">{searchTerm}</span>
-                            </span> :
-                            null
-                    }
-                </Artists>
-            }
+            {/* Display all results as songs, as Saavn API is song-centric */}
+            <Songs songs={filteredSongs} isFetching={isFetching} error={error} blacklist={blacklist} favorites={favorites}>
+                <span>
+                    <span className="text-gray-400 text-sm md:text-base">Results for </span>
+                    <span className="text-gray-100 text-sm md:text-base">{searchTerm}</span>
+                </span>
+            </Songs>
         </div>
     )
 };

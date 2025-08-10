@@ -25,7 +25,7 @@ export const albumOptions = [
     },
     {
         name: "Go to artist",
-        action: ({artist}) => `/artists/${artist.id}`
+        action: ({artist}) => `/artists/${artist.id}` // This link might not work if artist details are not available
     },
     {
         name: "Don't show album",

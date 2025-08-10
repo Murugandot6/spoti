@@ -1,55 +1,16 @@
-import RecentAlbumCard from "../Cards/RecentAlbumCard"
+import React from 'react';
+import { Error } from '../LoadersAndError';
 
-import { Swiper, SwiperSlide } from 'swiper/react'
-import { FreeMode } from 'swiper'
-
-import 'swiper/css'
-import 'swiper/css/free-mode'
-import SeeMore from "./SeeMore"
-
-const RecentAlbums = ({ albums, isFetching, error }) => {
+const RecentAlbums = ({ isFetching, error }) => {
+  if (isFetching) return <div className="h-6 rounded-md w-full max-w-[240px] loading-animation bg-white/5"></div>;
+  if (error) return <Error title="Recent Albums are not available with the current API." />;
 
   return (
-    <div className="">
-    <div className="flex items-end justify-between">
+    <div className="mb-8">
       <h3 className="text-white font-bold text-xl">Recent albums</h3>
-      <SeeMore link="/charts?type=albums" />
+      <Error title="Recent Albums are not available with the current API." />
     </div>
-    <Swiper
-        slidesPerView="auto"
-        spaceBetween={15}
-        freeMode
-        // centeredSlides
-        // centeredSlidesBounds
-        modules={{FreeMode}}
-        className="mt-4 p-[20px] max-w-[95vw] lg:max-w-[calc(100vw-370px)]"
-        >
-        {
-          isFetching ?
-            [1, 1, 1, 1, 1, 1, 1].map((elem, i) =>
-              <SwiperSlide
-                key={i}
-                style={{ width: '200px', height: 'auto' }}
-              >
-                <div className="h-[120px] rounded-lg bg-white/5 loading-animation flex flex-col justify-center p-2 gap-2">
-                  <div className="h-4 bg-black/50 rounded-md w-[80%]"></div>
-                  <div className="h-3 bg-black/50 rounded-md w-[50%]"></div>
-                </div>
-              </SwiperSlide>
-            ) :
-            albums?.slice(0, 10)?.map((album, i) => (
-                <SwiperSlide
-                  key={album?.id}
-                  style={{ width: '200px', height: 'auto' }}
-                  className="shadow-lg rounded-md animate-slideright transition-colors hover:bg-white/10"
-              >
-                <RecentAlbumCard i={i} album={album} />
-              </SwiperSlide>
-            ))
-        }
-    </Swiper>
-    </div>
-  )
-}
+  );
+};
 
-export default RecentAlbums
+export default RecentAlbums;

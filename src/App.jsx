@@ -2,15 +2,15 @@ import { useLayoutEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Route, Routes, useSearchParams } from 'react-router-dom';
 import {
-  ArtistDetails,
+  ArtistDetails, // Will be a placeholder
   Discover,
   Search,
   SongDetails,
-  TopCharts,
-  AlbumDetails,
-  Genres,
+  TopCharts, // Will be a placeholder
+  AlbumDetails, // Will be a placeholder
+  Genres, // Will be a placeholder
   Playlist,
-  GenreDetails,
+  GenreDetails, // Will be a placeholder
   PlaylistDetails,
   Favorites,
   Blacklist
@@ -38,17 +38,17 @@ const App = () => {
   return (
     <Routes>
       <Route element={<Layout />}>
-        <Route path="/charts" element={<TopCharts />} />
+        <Route path="/charts" element={<TopCharts />} /> {/* Placeholder */}
         <Route path="/*" element={<Discover />} />
         <Route element={<Details />}>
-          <Route path="/artists/:id" element={<ArtistDetails />} />
-          <Route path="/albums/:id" element={<AlbumDetails />} />
+          <Route path="/artists/:id" element={<ArtistDetails />} /> {/* Placeholder */}
+          <Route path="/albums/:id" element={<AlbumDetails />} /> {/* Placeholder */}
           <Route path="/songs/:songid" element={<SongDetails />} />
         </Route>
         <Route path="/search/:searchTerm" element={<Search />} />
 
-        <Route path="/genres/" element={<Genres />} />
-        <Route path="/genres/:id" element={<GenreDetails />} />
+        <Route path="/genres/" element={<Genres />} /> {/* Placeholder */}
+        <Route path="/genres/:id" element={<GenreDetails />} /> {/* Placeholder */}
                   
         <Route path="/playlists/" element={<Playlist />} />
         <Route path="/playlists/:id" element={<PlaylistDetails />} />

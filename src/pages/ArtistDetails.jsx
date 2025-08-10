@@ -1,75 +1,13 @@
-import { useParams } from "react-router-dom";
-
-import { useSelector } from "react-redux";
-
-import { Albums, Artists, Songs } from "../components/List";
-
-import { useGetArtistAlbumQuery, useGetArtistDetailsQuery, useGetArtistsQuery, useGetSongsQuery } from "../redux/services/DeezerApi";
-import { useContext, useEffect, useMemo } from "react";
-import { getSingleData } from "../utils/getData";
-import { DetailsContext } from "../components/Details";
+import React from 'react';
+import { Link } from 'react-router-dom';
 
 const ArtistDetails = () => {
-    const { favorites, blacklist } = useSelector((state) => state.library);
-    const { data, updateData, ...others } = useContext(DetailsContext);
-
-    const { id: artistid } = useParams();
-
-    const { data: artist, isFetching, error } = useGetArtistDetailsQuery(artistid);
-    const { data: albums, isFetching: isFetchingAlbums, error: errorFetchingAlbums } = useGetArtistAlbumQuery(artistid);
-    const { data: artists, isFetching: isFetchingArtists, error: errorFetchingArtists } = useGetArtistsQuery(artistid);
-
-    const tracklist = useMemo(() => artist?.tracklist ? artist?.tracklist.match(/\d+/)[0] : 0, [artist]);
-    const { data: tracks, isFetching: isFetchingSongs, error: errorFetchingSongs } = useGetSongsQuery(tracklist, 50);
-    
-    useEffect(() => updateData({ isFetching: true, error: false, data: {}, colors: [] }), [artistid]);
-
-    useEffect(() => {
-        const refinedData = getSingleData({ type: 'artists', data: artist, favorites, blacklist });
-
-        updateData({ ...others, isFetching, error, data: { ...refinedData, tracks: tracks?.data, song: tracks?.data && tracks?.data[0] } });
-    }, [artist, tracks, favorites, blacklist])
-
-    useEffect(() => {
-        const text = `Isai Artist - ${isFetching ? 'Loading...' : error ? 'Something went wrong.' : artist?.name}`;
-
-        document.getElementById('site_title').innerText = text;
-    }, [artist, isFetching, error])
-
-    return (
-        <div className="flex flex-col p-2 md:p-6 gap-10">
-            <Albums
-                blacklist={blacklist}
-                favorites={favorites}
-                isFetching={isFetchingAlbums}
-                error={errorFetchingAlbums}
-                albums={albums?.data}
-                showSort={true}
-            >
-                Recent releases
-            </Albums>
-            <Songs
-                blacklist={blacklist}
-                favorites={favorites}
-                isFetching={isFetchingSongs}
-                error={errorFetchingSongs}
-                songs={tracks?.data}
-                artist={data}
-                artistId={artistid}
-            >
-                Popular Songs by {artist?.name}
-            </Songs>
-            <Artists
-                blacklist={blacklist}
-                favorites={favorites}
-                isFetching={isFetchingArtists}
-                error={errorFetchingArtists}
-                artists={artists?.data}
-            >
-                Similar Artists
-            </Artists>
-        </div>
-    )
+  return (
+    <div className="p-4 flex-1 flex flex-col items-center justify-center gap-4 min-h-[80vh]">
+      <h3 className="text-gray-400 font-bold text-xl">Artist details are not available with the current API.</h3>
+      <Link to="/" className="px-4 sm:px-6 h-8 md:h-10 flex items-center justify-center rounded-full border border-white/5 hover:bg-gray-400 text-xs md:text-sm font-bold bg-gray-200 text-black">Go Home</Link>
+    </div>
+  );
 };
 
 export default ArtistDetails;

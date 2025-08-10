@@ -14,13 +14,13 @@ const QueueSong = ({ song, currentSong, handleDragOver, handleDragEnd, color, i,
       <span className="hidden md:flex items-center justify-center">
         <BiGridHorizontal size={25} />
       </span>
-      <img src={song?.album?.cover_small} className="rounded-md h-[50px] w-[50px] bg-white/10" />
+      <img src={song?.image[0]?.link} className="rounded-md h-[50px] w-[50px] bg-white/10" />
       <div className="flex flex-1 flex-col w-full">
-          <p className="text-gray-200 text-sm max-w-[250px] font-semibold truncate">{song?.title}</p>
+          <p className="text-gray-200 text-sm max-w-[250px] font-semibold truncate">{song?.name}</p>
           <p className="flex flex-row flex-wrap items-center text-xs text-gray-400">
-              <span className="block truncate">{song?.artist?.name}</span>
+              <span className="block truncate">{song?.primaryArtists}</span>
               <BsDot size={15} />
-              <span className="block truncate">{song?.album?.title}</span>
+              <span className="block truncate">{song?.album?.name}</span>
           </p>
       </div>
     </div>

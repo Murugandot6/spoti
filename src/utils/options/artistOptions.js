@@ -7,10 +7,7 @@ export const artistOptions = [
         name: "Play songs",
         action: ({song, tracks, i}) => playSongs({song, tracks, i})
     },
-    {
-        name: "About artist",
-        action: () => { location.href = "#bio" }
-    },
+    // "About artist" removed as detailed artist info is not directly available
     {
         name: "Add to favorites",
         action: ({artist}) => addFavorites('artists', artist)

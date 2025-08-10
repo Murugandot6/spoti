@@ -1,46 +1,16 @@
-import { useMemo } from 'react';
-import { ArtistCard } from '../Cards';
-import { ArtistLoading, Error } from '../LoadersAndError';
-import { getData } from '../../utils/getData';
-import SeeMore from './SeeMore';
-import { useSearchParams } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import React from 'react';
+import { Error } from '../LoadersAndError';
 
-const Artists = ({ artists, children, isFetching, error, showmore, genreid, noFilter }) => {
-  const library = useSelector(state => state.library);
-  const [params, setParams] = useSearchParams();
-  const newArtists = useMemo(() => getData({ type: 'artists', data: artists, noFilter, sortType: params.get('sort') }), [library, artists, noFilter]);
-  
+const Artists = ({ children, isFetching, error }) => {
+  if (isFetching) return <div className="h-6 rounded-md w-full max-w-[240px] bg-white/5 animation-loading"></div>;
+  if (error) return <Error title="Artists are not available with the current API." />;
+
   return (
     <div id="artists" className="mb-8">
-      <div className={`flex items-end justify-between ${children || isFetching ? 'mb-4' : ''}`}>
-        {
-          children && isFetching ?
-            <span className="h-6 rounded-md w-full max-w-[240px] bg-white/5 animation-loading"></span> :
-            <h3 className="text-white/80 font-bold text-xl mb-6">{children}</h3>
-        }
-        {
-          showmore &&
-          <SeeMore link={`/charts?type=artists&genre=${genreid}`} />
-        }
-      </div>
-
-      {
-        isFetching ?
-          <ArtistLoading num={5} /> :
-          (
-            error ?
-              <Error title="Something went wrong" /> :
-              <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 w-full gap-2 md:gap-4">
-                {
-                  newArtists &&
-                  newArtists.map((artist, i) => <ArtistCard key={i} i={i} artist={artist} />)
-                }
-              </div>
-          )
-      }
+      <h3 className="text-white/80 font-bold text-xl mb-6">{children}</h3>
+      <Error title="Artists are not available with the current API." />
     </div>
-  )
-}
+  );
+};
 
-export default Artists
+export default Artists;

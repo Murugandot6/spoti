@@ -1,51 +1,16 @@
-import { useMemo } from 'react'
+import React from 'react';
+import { Error } from '../LoadersAndError';
 
-import { AlbumCard } from '../Cards'
-import { AlbumLoading, Error } from '../LoadersAndError'
-import Sort from './Sort'
-import SeeMore from './SeeMore'
-
-import { getData } from '../../utils/getData'
-import { useSearchParams } from 'react-router-dom'
-import { useSelector } from 'react-redux'
-
-const Albums = ({ albums, children, showSort, isFetching, error, showmore, genreid, noFilter }) => {
-  const library = useSelector(state => state.library);
-  const [params, setParams] = useSearchParams();
-  const newAlbums = useMemo(() => getData({ type: 'albums', data: albums, noFilter, sortType: params.get('sort'), albumFilter: params.get('filter') }), [library, albums, noFilter, params]);
-
+const Albums = ({ children, isFetching, error }) => {
+  if (isFetching) return <div className="h-6 rounded-md w-full max-w-[240px] loading-animation bg-white/5"></div>;
+  if (error) return <Error title="Albums are not available with the current API." />;
+  
   return (
     <div id="albums" className="mb-8">
-      <div className="flex items-end justify-between mb-4">
-        {
-          children && isFetching ?
-            <span className="h-6 rounded-md w-full max-w-[240px] loading-animation bg-white/5"></span> :
-            <h3 className="text-white font-bold text-xl">{children}</h3>
-        }
-        {
-          showmore &&
-          <SeeMore link={`/charts?type=albums&genre=${genreid}`} />
-        }
-      </div>
-      {
-        showSort && <Sort type="album" />
-      }
-      {
-        isFetching ?
-          <AlbumLoading num={5} /> :
-          error ?
-            <Error title="Could not load albums" /> :
-            <div className="text-white grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
-              {
-                newAlbums &&
-                newAlbums.map((album, i) => (
-                  <AlbumCard key={i} i={i} isRelated={true} album={album} />
-                ))
-              }
-            </div>
-      }
+      <h3 className="text-white font-bold text-xl">{children}</h3>
+      <Error title="Albums are not available with the current API." />
     </div>
   );
-}
+};
 
-export default Albums
+export default Albums;

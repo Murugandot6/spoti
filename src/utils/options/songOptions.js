@@ -33,11 +33,11 @@ export const songOptions = [
     },
     {
         name: "Go to artist",
-        action: ({artist}) => `/artists/${artist.id}`
+        action: ({artist}) => `/artists/${artist.id}` // This link might not work if artist details are not available
     },
     {
         name: "Go to album",
-        action: ({album}) => `/albums/${album.id}}`
+        action: ({album}) => `/albums/${album.id}}` // This link might not work if album details are not available
     },
     {
         name: "Don't show song",

@@ -6,8 +6,8 @@ import { useSelector } from "react-redux";
 
 import { Songs, SongLyrics } from "../components/List";
 
-import { useGetLyricsQuery } from "../redux/services/MusixMatchApi";
-import { useGetSongDetailsQuery, useGetSongsQuery } from "../redux/services/DeezerApi";
+import { useGetLyricsQuery } from "../redux/services/MusixMatchApi"; // Keep MusixMatch for now, but it might not work
+import { useGetSongDetailsByIdQuery, useSearchSongsQuery } from "../redux/services/saavnApi"; // Use Saavn API
 import { getSingleData } from "../utils/getData";
 import { DetailsContext } from "../components/Details";
 
@@ -20,30 +20,45 @@ const SongDetails = () => {
 
     const { songid } = useParams()
 
-    const { data: song, isFetching, error } = useGetSongDetailsQuery( songid )
-    const { data: lyricsData, isFetching: isFetchingLyrics, error: errorFetchingLyrics } = useGetLyricsQuery( data?.isrc || 0 )
-    const { data: relatedSongs, isFetching: isFetchingRelated, error: errorFetchingRelated } = useGetSongsQuery( data?.artist?.tracklist.match(/[\d]+/) || 0, 20)
+    // Use Saavn's getSongDetailsById or search for the song by ID
+    const { data: songDetails, isFetching, error } = useGetSongDetailsByIdQuery( songid );
+    const song = songDetails?.data?.[0] || songDetails?.data; // Adjust based on actual Saavn response for single song
+
+    // Musixmatch API requires ISRC, which Saavn API might not provide.
+    // Lyrics functionality might be broken or removed.
+    const { data: lyricsData, isFetching: isFetchingLyrics, error: errorFetchingLyrics } = useGetLyricsQuery( song?.isrc || 0, { skip: !song?.isrc } );
+    
+    // For related songs, use a general search or search by artist name
+    const { data: relatedSongsData, isFetching: isFetchingRelated, error: errorFetchingRelated } = useSearchSongsQuery( song?.primaryArtists || 'top songs', { skip: !song?.primaryArtists } );
+    const relatedSongs = relatedSongsData?.data?.results?.filter(s => s.id !== songid)?.slice(0, 6);
 
     useEffect(() => { 
         updateData({ isFetching: true, error: false, data: {}, colors: [] })
     }, [songid])
     
     useEffect(() => {
-        const refinedData = getSingleData({ type: 'tracks', data: song, favorites, blacklist })
-        updateData({ ...others, colors, isFetching, error, data: {...refinedData, song: refinedData, tracks: [refinedData]} })
-    }, [song, favorites, blacklist])
+        if (song) {
+            const refinedData = getSingleData({ type: 'tracks', data: song, favorites, blacklist })
+            updateData({ ...others, colors, isFetching, error, data: {...refinedData, song: refinedData, tracks: [refinedData]} })
+        }
+    }, [song, favorites, blacklist, isFetching, error])
 
     useEffect(() => {
-        const text = `Isai Song - ${isFetching ? 'Loading...' : error ? 'Uh oh! Song data could not be loaded :(' : song?.title}`
+        const text = `Isai Song - ${isFetching ? 'Loading...' : error ? 'Uh oh! Song data could not be loaded :(' : song?.name}` // Use song.name
         document.getElementById('site_title').innerText = text
     }, [song, isFetching, error]);
 
     useEffect(() => {
-        setLyrics(
-            lyricsData?.message?.body?.lyrics?.lyrics_body
-            .replace(/(\*{7}[a-z|\s]+\*{7}|\(\d+\))/ig, '')
-            .split('\n')
-        )
+        // Check if lyricsData exists and has lyrics_body
+        if (lyricsData?.message?.body?.lyrics?.lyrics_body) {
+            setLyrics(
+                lyricsData.message.body.lyrics.lyrics_body
+                .replace(/(\*{7}[a-z|\s]+\*{7}|\(\d+\))/ig, '')
+                .split('\n')
+            )
+        } else {
+            setLyrics([]); // Clear lyrics if not found
+        }
     }, [lyricsData])
 
     return (
@@ -62,7 +77,7 @@ const SongDetails = () => {
                         isFetching={isFetchingRelated}
                         error={errorFetchingRelated}
                         songData={data}
-                        songs={relatedSongs?.data?.filter(song => song.id != songid)?.slice(0, 6)}
+                        songs={relatedSongs}
                     >
                         Similar Songs
                     </Songs>

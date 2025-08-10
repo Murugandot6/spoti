@@ -1,77 +1,13 @@
-import { useParams } from "react-router-dom";
-
-import { useEffect, useContext } from "react";
-import { useSelector } from "react-redux"
-
-import { Albums, Tracks } from '../components/List'
-import { pause, playSongs } from "../utils/player";
-
-import { useGetAlbumDetailsQuery, useGetAlbumsQuery } from "../redux/services/DeezerApi";
-import { getSingleData } from "../utils/getData";
-import { DetailsContext } from "../components/Details";
+import React from 'react';
+import { Link } from 'react-router-dom';
 
 const AlbumDetails = () => {
-  const { data, updateData, ...others } = useContext(DetailsContext)
-  
-  const { activeSong, isPlaying } = useSelector( (state) => state.player )
-  const { favorites, blacklist } = useSelector( state => state.library )
-
-  const { id: albumid } = useParams()
-
-  const { data: album, isFetching, error } = useGetAlbumDetailsQuery( albumid )
-  const { data: relatedAlbums, isFetching: isFetchingRelatedAlbums, error: errorFetchingRelatedAlbums } = useGetAlbumsQuery( album?.genre_id )
-
-  const handlePlay = (song, i) => {
-    const {tracks, contributors, genres, artist, ...album} = data;
-    playSongs({ tracks, song, i, album });
-  }
-  
-  useEffect(() => { 
-    updateData({ isFetching: true, error: false, data: {}, colors: [] });
-  }, [albumid])
-
-  useEffect(() => {
-    const text = isFetching ?
-      'Loading details...' :
-      error ?
-        'Uh Oh, Something went wrong' :
-        `${album?.title} by ${album?.artist?.name}`;
-
-    document.getElementById('site_title').innerText = `Isai Album - ${text}`;
-  }, [isFetching, error])
-
-  useEffect(() => {
-    const refinedData = getSingleData({ data: album, type: 'albums', favorites, blacklist });
-    updateData({ ...others, isFetching, error, data: { ...refinedData, song: refinedData?.tracks && refinedData.tracks[0] } });
-  }, [album, favorites, blacklist])
-
   return (
-    <div className="flex flex-col gap-4">
-          <Tracks 
-            isFetching={isFetching}
-            tracks={data?.tracks} 
-            album={data} 
-            activeSong={activeSong} 
-            isPlaying={isPlaying} 
-            handlePause={pause} 
-            handlePlay={handlePlay} 
-            favorites={favorites}
-            blacklist={blacklist}
-          />
-      <div className="p-2 md:p-4">
-        <Albums
-          favorites={favorites}
-          blacklist={blacklist}
-          isFetching={isFetchingRelatedAlbums}
-          error={errorFetchingRelatedAlbums}
-          albums={relatedAlbums?.data || []}
-          album={data}
-        >
-          Similar Albums
-        </Albums>
-      </div>
+    <div className="p-4 flex-1 flex flex-col items-center justify-center gap-4 min-h-[80vh]">
+      <h3 className="text-gray-400 font-bold text-xl">Album details are not available with the current API.</h3>
+      <Link to="/" className="px-4 sm:px-6 h-8 md:h-10 flex items-center justify-center rounded-full border border-white/5 hover:bg-gray-400 text-xs md:text-sm font-bold bg-gray-200 text-black">Go Home</Link>
     </div>
-  )
-}
+  );
+};
 
-export default AlbumDetails
+export default AlbumDetails;

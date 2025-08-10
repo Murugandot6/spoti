@@ -1,13 +1,8 @@
-import ArtistChart from "./ArtistChart";
-import SongChart from "./SongChart";
-import AlbumChart from "./AlbumChart";
-import RadioChart from "./RadioChart";
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { MdArrowBack } from 'react-icons/md';
 
-import { Link } from "react-router-dom";
-
-import { MdArrowBack } from "react-icons/md";
-
-const index = ({ category, active, i }) => {
+const Charts = ({ category, active, i }) => {
     const origin = i === 0 ? 'origin-top-left' : i === 1 ? 'origin-top-right' : i === 2 ? 'origin-bottom-left' : i === 3 ? 'origin-bottom-right' : ''
     
     return (
@@ -24,20 +19,12 @@ const index = ({ category, active, i }) => {
             </div>
             {
                 active && 
-                    (
-                        category.name === 'artist' ?
-                        <ArtistChart /> :
-                        category.name === 'song' ?
-                        <SongChart /> :
-                        category.name === 'album' ?
-                        <AlbumChart /> :
-                        category.name === 'radio' ?
-                        <RadioChart /> :
-                        null
-                    )
+                <div className="p-4 flex-1 flex flex-col items-center justify-center gap-4 min-h-[60vh]">
+                    <h3 className="text-gray-400 font-bold text-xl">Charts for {category.name}s are not available with the current API.</h3>
+                </div>
             }
         </div>
     )
 }
 
-export default index
+export default Charts;

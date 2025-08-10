@@ -8,10 +8,10 @@ const AlbumInfo = ({ data }) => {
             {
                 data.type == 'album' &&
                 <>
-                    <span>{(new Date(data.release_date)).getFullYear()}</span>
+                    <span>{data.year}</span> {/* Saavn provides year, not full release_date */}
                     <BsDot size={20} />
                     <span>
-                        {data.nb_tracks} songs
+                        {data.songCount} songs {/* Assuming songCount is available for albums */}
                     </span>
                     <BsDot size={20} />
                 </>
@@ -37,15 +37,15 @@ const AlbumInfo = ({ data }) => {
                     <BsDot size={20} />
                 </>
             }
-            {data?.type == 'artist' && <a href="#albums">{data?.nb_album} releases </a>}
+            {data?.type == 'artist' && <a href="#albums">{data?.followerCount} followers </a>} {/* Saavn has followerCount for artists */}
             {
                 data?.type == 'track' &&
                 <>
                     <Link to={`/albums/${data?.album?.id}`}>
                         {
-                            data?.album?.title.length > 30 ?
-                                data?.album?.title.substring(0, 30) + '...' :
-                                data?.album?.title
+                            data?.album?.name.length > 30 ?
+                                data?.album?.name.substring(0, 30) + '...' :
+                                data?.album?.name
                         }
                     </Link>
                     <BsDot size={20} />

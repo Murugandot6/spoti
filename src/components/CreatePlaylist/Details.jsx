@@ -7,7 +7,7 @@ const Details = ({ playlistInfo, handleChange, errorSavingPlaylist }) => {
         {
           playlistInfo.tracks.length > 0 &&
           <img 
-            src={playlistInfo.tracks[playlistInfo.tracks.length - 1].album.cover_medium} 
+            src={playlistInfo.tracks[playlistInfo.tracks.length - 1].image?.[1]?.link || playlistInfo.tracks[playlistInfo.tracks.length - 1].image?.[0]?.link} // Use Saavn image links
             className="h-full w-full block rounded-[10px]" 
             alt="" 
           />

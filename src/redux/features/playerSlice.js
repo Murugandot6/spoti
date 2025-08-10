@@ -11,6 +11,7 @@ const initialState = {
   shuffle: false,
   repeat: false,
   nowPlaying: false,
+  bitrate: '3', // Default bitrate from Saavn's index.html (160kbps)
 };
 
 const playerSlice = createSlice({
@@ -122,10 +123,13 @@ const playerSlice = createSlice({
           state[entry] = value
         }
       }
+    },
+    setBitrate: (state, action) => {
+      state.bitrate = action.payload;
     }
   },
 });
 
-export const { setActiveSong, addToUpNext, nextSong, prevSong, stop, shuffleOn, shuffleOff, setRepeat, playPause, selectGenreListId, setAlbum, setNowPlaying, setPlayer } = playerSlice.actions;
+export const { setActiveSong, addToUpNext, nextSong, prevSong, stop, shuffleOn, shuffleOff, setRepeat, playPause, selectGenreListId, setAlbum, setNowPlaying, setPlayer, setBitrate } = playerSlice.actions;
 
 export default playerSlice.reducer;

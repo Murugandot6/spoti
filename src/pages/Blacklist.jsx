@@ -25,7 +25,8 @@ const Blacklist = () => {
         </div>
         <div className="flex items-center flex-wrap gap-3">
           {
-            Object.entries(blacklist).map(([key, value]) => (
+            // Only show categories that are likely to have data with Saavn API
+            Object.entries(blacklist).filter(([key, value]) => key === 'tracks' || key === 'playlists').map(([key, value]) => (
               <a href={`#${key}`} className="rounded-full h-8 md:h-9 flex items-center justify-center gap-3 pl-2 sm:pl-4 pr-4 py-1 bg-white/5 text-gray-300 font-semibold text-sm hover:bg-white/10 hover:border-transparent">
                 {
                   key === 'artists' ?
