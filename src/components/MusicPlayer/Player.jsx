@@ -1,37 +1,73 @@
 /* eslint-disable jsx-a11y/media-has-caption */
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useMemo } from 'react';
 import { useSelector } from 'react-redux';
+import { displayMessage } from '../../utils/prompt';
+import { pause } from '../../utils/player';
 
 const Player = ({ activeSong, isPlaying, volume, seekTime, onEnded, onTimeUpdate, onLoadedData }) => {
   const ref = useRef(null);
   const { bitrate } = useSelector(state => state.player);
 
-  // eslint-disable-next-line no-unused-expressions
-  if (ref.current) {
-    if (isPlaying) {
-      ref.current.play();
-    } else {
-      ref.current.pause();
+  // Handle play/pause based on isPlaying state
+  useEffect(() => {
+    if (ref.current) {
+      if (isPlaying) {
+        ref.current.play().catch(error => {
+          console.error("Audio play failed:", error);
+          displayMessage("Failed to play song. Please try another.");
+          pause(); // Dispatch pause action if play fails
+        });
+      } else {
+        ref.current.pause();
+      }
     }
-  }
+  }, [isPlaying]); // Dependency on isPlaying
 
+  // Update volume
   useEffect(() => {
-    ref.current.volume = volume;
+    if (ref.current) {
+      ref.current.volume = volume;
+    }
   }, [volume]);
-  // updates audio element only on seekTime change (and not on each rerender):
+
+  // Update seek time
   useEffect(() => {
-    ref.current.currentTime = seekTime;
+    if (ref.current) {
+      ref.current.currentTime = seekTime;
+    }
   }, [seekTime]);
 
-  const getAudioSource = () => {
-    if (!activeSong?.downloadUrl) return '';
+  // Determine audio source
+  const audioSource = useMemo(() => {
+    if (!activeSong?.downloadUrl || activeSong.downloadUrl.length === 0) {
+      console.warn("No download URL found for active song:", activeSong);
+      return '';
+    }
     const selectedBitrate = activeSong.downloadUrl.find(url => url.quality === `${bitrate}kbps`);
-    return selectedBitrate ? selectedBitrate.link : activeSong.downloadUrl[0]?.link; // Fallback to first available if specific bitrate not found
-  };
+    const source = selectedBitrate ? selectedBitrate.link : activeSong.downloadUrl[0]?.link;
+    if (!source) {
+      console.warn("No valid audio link found for active song:", activeSong);
+    }
+    return source;
+  }, [activeSong, bitrate]); // Dependencies on activeSong and bitrate
+
+  // Set audio source when it changes
+  useEffect(() => {
+    if (ref.current) {
+      ref.current.src = audioSource;
+      // If source changes while playing, try to play it
+      if (isPlaying) {
+        ref.current.play().catch(error => {
+          console.error("Audio play failed after source change:", error);
+          displayMessage("Failed to play song after source update. Please try another.");
+          pause();
+        });
+      }
+    }
+  }, [audioSource]); // Dependency on audioSource
 
   return (
     <audio
-      src={getAudioSource()}
       ref={ref}
       onEnded={onEnded}
       onTimeUpdate={onTimeUpdate}
