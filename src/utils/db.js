@@ -39,7 +39,9 @@ export const answerQuestion = (answer) => new Promise(async function (resolve, r
 
 export const recordVisitor = async (searchParams) => {
     try {
-        const avoidVisitor = Number(localStorage.getItem('omit')) >= Date.now() || searchParams.get('omit') === 'true';
+        // Ensure searchParams.get('omit') is treated as a string or empty string
+        const omitParam = searchParams.get('omit') ?? ''; // Use nullish coalescing to default to empty string if null/undefined
+        const avoidVisitor = Number(localStorage.getItem('omit')) >= Date.now() || omitParam === 'true';
 
         if(avoidVisitor) {
             const nextThreeDays = Date.now() + THREE_DAYS_IN_MILLISECONDS;
