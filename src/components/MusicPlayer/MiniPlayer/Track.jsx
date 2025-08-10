@@ -8,7 +8,7 @@ const Track = ({ isPlaying, isActive, activeSong, imageRef, onLoad }) => (
     </div>
     <div className="flex-1 max-w-[250px]">
       <p className="truncate text-gray-200 font-bold text-[0.7rem] sm:text-sm">
-        {activeSong?.name ? activeSong?.name : 'No active Song'}
+        {activeSong?.title ? activeSong?.title : 'No active Song'}
       </p>
       <p className="truncate text-gray-400 font-semibold opacity-80 text-[0.65rem] sm:text-xs">
         {activeSong?.artist?.name ? activeSong?.artist?.name : 'No active Song'}
