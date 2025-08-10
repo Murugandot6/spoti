@@ -50,4 +50,4 @@ const GenreDetailsHeader = ({ genre, charts, isFetching, error, setColors, bg, t
     )
 }
 
-export default GenreDetails
+export default GenreDetailsHeader
