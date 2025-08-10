@@ -11,19 +11,17 @@ const SongInfo = ({ song, artistId }) => {
       </Link>
         <div className="flex flex-row flex-wrap gap-1 items-center text-gray-300">
           {
-            artistId ?
-            // Saavn API's primaryArtists is a string, not an array of contributors.
-            // We'll just display the primary artist name.
+            // Check if song.artist.id is a number before creating the Link
+            typeof song?.artist?.id === 'number' ?
             <Link to={`/artists/${song.artist.id}`}>
               <p className="text-[0.75em] font-semibold text-gray-200 flex flex-row items-center justify-start truncate">
                 {song?.primaryArtists}
               </p>
             </Link> :
-            <Link to={`/artists/${song.artist.id}`}>
-              <p className="text-[0.75em] font-semibold text-gray-300 max-w-[200px] flex flex-row items-center justify-start gap-1 truncate">
-                {song?.primaryArtists}
-              </p>
-            </Link>
+            // If not a number, just display the artist name without a link
+            <p className="text-[0.75em] font-semibold text-gray-300 max-w-[200px] flex flex-row items-center justify-start gap-1 truncate">
+              {song?.primaryArtists}
+            </p>
           }
           {song?.explicitContent === 1 && <MdExplicit size={20} />}
         </div>
@@ -37,4 +35,4 @@ const SongInfo = ({ song, artistId }) => {
   )
 }
 
-export default SongInfo
+export default SongInfo;
