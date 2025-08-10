@@ -1,5 +1,5 @@
 import PlayPause from "../PlayPause"
-import { songImage as defaultSongImage } from "../../assets/images"; // Reverted to the correct, simpler import path
+import { songImage as defaultSongImage } from "../../../assets/images"; // Corrected relative import path
 
 const SongImage = ({ song, activeSong, isPlaying, handlePlayClick, handlePauseClick }) => {
   const imageUrl = song?.image?.[0]?.link || defaultSongImage; // Use fallback
