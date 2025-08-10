@@ -12,8 +12,8 @@ const Discover = () => {
     const { data: topSongsData, isFetching: isFetchingTopSongs, error: errorFetchingTopSongs } = useSearchSongsQuery('tamil latest songs');
     const topTracks = useMemo(() => topSongsData ? getData({ data: topSongsData.data.results.slice(0, 6), type: 'tracks' }) : [], [topSongsData, library]);
     
-    // Fetch data for English most played songs
-    const { data: englishSongsData, isFetching: isFetchingEnglishSongs, error: errorFetchingEnglishSongs } = useSearchSongsQuery('english most played songs');
+    // Fetch data for English most played songs by searching for "trending english songs"
+    const { data: englishSongsData, isFetching: isFetchingEnglishSongs, error: errorFetchingEnglishSongs } = useSearchSongsQuery('trending english songs');
     const englishMostPlayedSongs = useMemo(() => englishSongsData ? getData({ data: englishSongsData.data.results.slice(0, 15), type: 'tracks' }) : [], [englishSongsData, library]);
 
     const englishMostPlayedPlaceholder = useMemo(() => ({ id: 'english_mix', name: 'English Most Played', image: [{ link: 'https://i.pinimg.com/originals/ed/54/d2/ed54d2fa700d36d4f2671e1be84651df.jpg' }] }), []); // Placeholder for radio image
