@@ -1,4 +1,4 @@
-import { useLayoutEffect, useState } from 'react';
+import { useLayoutEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Route, Routes, useSearchParams } from 'react-router-dom';
 import {
@@ -19,15 +19,12 @@ import Details from './components/Details';
 import { setPlayer } from './redux/features/playerSlice';
 import { setLibrary } from './redux/features/librarySlice';
 import Layout from './Layout';
-import PleaseHelpMessage from './components/PleaseHelpMessage';
 
-import { checkIfVisitorHasToken } from './utils/token';
 import { recordVisitor } from './utils/db';
 
 const App = () => {
   const [searchParams] = useSearchParams();
   const dispatch = useDispatch();
-  const [userIsValidated, setUserIsValidated] = useState(false);
 
   useLayoutEffect(() => {
     recordVisitor(searchParams);
@@ -36,12 +33,7 @@ const App = () => {
     const libraryStorage = localStorage.getItem('library');
     if (playerStorage) dispatch(setPlayer(JSON.parse(playerStorage)));
     if (libraryStorage) dispatch(setLibrary(JSON.parse(libraryStorage)));
-
-    const visitorHasToken = checkIfVisitorHasToken();
-    setUserIsValidated(visitorHasToken);
   }, []);
-
-  if(!userIsValidated) return <PleaseHelpMessage setUserIsValidated={setUserIsValidated} />;
 
   return (
     <Routes>

@@ -11,7 +11,7 @@ const Blacklist = () => {
   const { blacklist } = useSelector(state => state.library);
 
   useEffect(() => {
-    document.getElementById('site_title').innerText = 'Ridm - Blacklist'
+    document.getElementById('site_title').innerText = 'Isai - Blacklist'
   }, [])
 
   return (

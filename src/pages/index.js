@@ -4,7 +4,6 @@ import SongDetails from './SongDetails';
 import Search from './Search';
 import TopCharts from './TopCharts';
 import AlbumDetails from './AlbumDetails';
-import Welcome from './Welcome'
 import Genres from './Genres'
 import GenreDetails from './GenreDetails'
 import Playlist from './Playlist';
@@ -19,7 +18,6 @@ export {
   AlbumDetails,
   SongDetails,
   TopCharts,
-  Welcome,
   Genres,
   GenreDetails,
   Playlist,

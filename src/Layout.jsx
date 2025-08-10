@@ -2,7 +2,6 @@ import React, { useEffect, useMemo, useRef } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
-import { Welcome } from './pages';
 import { MessageBox, AddToPlaylist, Prompt } from './components/Prompts';
 import NavigationAndSearch from './components/NavigationAndSearch';
 import MobileNavLinks from './components/Sidebar/MobileNavLinks';
@@ -32,7 +31,6 @@ const Layout = () => {
             <MessageBox />
             <AddToPlaylist />
             <Prompt />
-            <Welcome />
             <div ref={bodyRef} id="main-body" className="pb-[100px] lg:pb-0 lg:border lg:border-white/5 sm:rounded-[15px] lg:h-[calc(100vh-16px)] h-[100vh] overflow-y-scroll flex flex-col gap-2">
                 <NavigationAndSearch />
                 <div className={`transition-opacity ${nowPlaying && 'opacity-0'} row-span-2`}>

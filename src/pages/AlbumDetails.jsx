@@ -37,7 +37,7 @@ const AlbumDetails = () => {
         'Uh Oh, Something went wrong' :
         `${album?.title} by ${album?.artist?.name}`;
 
-    document.getElementById('site_title').innerText = `Ridm Album - ${text}`;
+    document.getElementById('site_title').innerText = `Isai Album - ${text}`;
   }, [isFetching, error])
 
   useEffect(() => {

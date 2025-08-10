@@ -19,7 +19,7 @@ const Search = () => {
     const { data: artistSearch, isFetching: isFetchingArtist, error: errorFetchingArtist } = useGetSearchArtistsQuery( searchTerm )
 
     useEffect(() => {
-        const text = `Search results for - ${searchTerm}`
+        const text = `Isai Search results for - ${searchTerm}`
         document.getElementById('site_title').innerText = text
     }, [searchTerm])
 

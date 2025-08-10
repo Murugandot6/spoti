@@ -21,7 +21,7 @@ const Discover = () => {
     const { data: recentAlbums, isFetching: isFetchingRecentAlbums, error: errorFetchingRecentAlbums } = useGetRecentReleasesQuery(0);
 
     useEffect(() => {   
-        document.getElementById('site_title').innerText = 'Ridm - Web Player: Rhythm for everyone.'
+        document.getElementById('site_title').innerText = 'Isai - Web Player: Rhythm for everyone.'
     }, [])
 
     return (

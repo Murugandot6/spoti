@@ -14,7 +14,7 @@ const Favorites = () => {
   , [favorites]);
 
   useEffect(() => {
-    document.getElementById('site_title').innerText = 'Ridm - Favorites';
+    document.getElementById('site_title').innerText = 'Isai - Favorites';
   }, [])
 
   return (

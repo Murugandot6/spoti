@@ -28,7 +28,7 @@ const GenreDetails = () => {
     }, [genre, favorites, blacklist])
 
     useEffect(() => {
-        const text = `Ridm Genre - ${isFetching ? 'Loading...' : error ? 'Could not fetch details' : genre?.name}`;
+        const text = `Isai Genre - ${isFetching ? 'Loading...' : error ? 'Could not fetch details' : genre?.name}`;
         document.getElementById('site_title').innerText = text;
     }, [genre])
 

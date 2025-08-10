@@ -34,7 +34,7 @@ const SongDetails = () => {
     }, [song, favorites, blacklist])
 
     useEffect(() => {
-        const text = `Ridm Song - ${isFetching ? 'Loading...' : error ? 'Uh oh! Song data could not be loaded :(' : song?.title}`
+        const text = `Isai Song - ${isFetching ? 'Loading...' : error ? 'Uh oh! Song data could not be loaded :(' : song?.title}`
         document.getElementById('site_title').innerText = text
     }, [song, isFetching, error]);
 

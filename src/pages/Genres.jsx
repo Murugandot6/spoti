@@ -9,7 +9,7 @@ const GenresPage = () => {
   const { data, isFetching, error } = useGetTopGenresQuery()
 
   useEffect(() => {
-    document.getElementById('site_title').innerText = 'Ridm - Genres'
+    document.getElementById('site_title').innerText = 'Isai - Genres'
   }, [])
 
   return (

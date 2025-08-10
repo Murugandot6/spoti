@@ -31,7 +31,7 @@ const ArtistDetails = () => {
     }, [artist, tracks, favorites, blacklist])
 
     useEffect(() => {
-        const text = `Ridm Artist - ${isFetching ? 'Loading...' : error ? 'Something went wrong.' : artist?.name}`;
+        const text = `Isai Artist - ${isFetching ? 'Loading...' : error ? 'Something went wrong.' : artist?.name}`;
 
         document.getElementById('site_title').innerText = text;
     }, [artist, isFetching, error])

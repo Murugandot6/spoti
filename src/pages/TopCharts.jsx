@@ -16,7 +16,7 @@ const TopCharts = () => {
 
     useEffect(() => {
         const type = params.get('type');
-        const text = `Ridm - Top ${categories.some( (cat, i) => cat.to == type ) ? type[0].toUpperCase() + type.substring(1, ) : 'Charts'}`
+        const text = `Isai - Top ${categories.some( (cat, i) => cat.to == type ) ? type[0].toUpperCase() + type.substring(1, ) : 'Charts'}`
 
         setShowingType(categories.some( (cat, i) => cat.to == type ));
         document.getElementById('site_title').innerText = text;

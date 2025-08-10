@@ -55,7 +55,7 @@ const Playlist = () => {
   }, [newPlaylist.genreAction])
 
   useEffect(() => {
-    const text = `Ridm - ${isInAddPage ? 'Create New Playlist' : 'Playlists'}`
+    const text = `Isai - ${isInAddPage ? 'Create New Playlist' : 'Playlists'}`
     document.getElementById('site_title').innerText = text
   }, [params])
 
