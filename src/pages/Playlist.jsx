@@ -2,7 +2,8 @@ import { useEffect, useMemo, useReducer, useState } from 'react'
 
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
-import { useGetTopGenresQuery } from '../redux/services/DeezerApi';
+// Removed useGetTopGenresQuery as it's from the removed DeezerApi
+// import { useGetTopGenresQuery } from '../redux/services/DeezerApi';
 
 import CreatePlaylist from '../components/CreatePlaylist';
 
@@ -11,7 +12,11 @@ import { createNewPlaylist, playlistDispatch, playlistState } from '../utils/lib
 import PlaylistsFront from '../components/PlaylistsFront'
 
 const Playlist = () => {
-  const { data: genres, isFetching, error } = useGetTopGenresQuery();
+  // const { data: genres, isFetching, error } = useGetTopGenresQuery(); // This line is removed
+  const genres = { data: [] }; // Mock empty genres data as Saavn API doesn't provide this directly
+  const isFetching = false; // Set to false as we're not fetching
+  const error = false; // Set to false as we're not fetching
+
   const navigate = useNavigate();
   const [params, setParams] = useSearchParams();
   const [newPlaylist, setNewPlaylist] = useReducer(playlistDispatch, playlistState);
@@ -36,7 +41,7 @@ const Playlist = () => {
   }
 
   useEffect(() => { 
-    if (!genres) return;
+    // if (!genres) return; // This check is no longer needed with mock data
     setNewPlaylist({ type: 'SETGENRES', payload: genres.data });
   }, [genres])
 
