@@ -1,9 +1,12 @@
 import PlayPause from "../PlayPause"
+import { songImage as defaultSongImage } from '../../assets/images'; // Import default image
 
 const SongImage = ({ song, activeSong, isPlaying, handlePlayClick, handlePauseClick }) => {
+  const imageUrl = song?.image?.[0]?.link || defaultSongImage; // Use fallback
+
   return (
     <div className="h-[50px] aspect-square relative rounded-[8px] overflow-hidden flex justify-center ml-2 items-center">
-      <img className="h-full w-auto block min-h-[50px] min-w-[50px]" src={song?.image[0]?.link} alt={song.title} />
+      <img className="h-full w-auto block min-h-[50px] min-w-[50px]" src={imageUrl} alt={song.title} />
       <div className={`play_overlay transition-opacity absolute w-full h-full rounded-[7px] flex items-center justify-center bg-black/50 backdrop-blur-sm ${activeSong?.id === song.id && 'current-song'}`}>
         <PlayPause 
           isPlaying={isPlaying} 

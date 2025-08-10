@@ -1,4 +1,3 @@
-
 import { Client, Databases, ID } from "appwrite";
 
 const THREE_DAYS_IN_MILLISECONDS = 259200000;
@@ -8,8 +7,9 @@ export const getIpAddress = async () => {
         const response = await fetch(import.meta.env.VITE_IP_URL);
         const data = await response.json();
 
-        return data.ip;
+        return data.ip || "Unknown IP"; // Ensure it's always a string
     } catch (error) {
+        console.error("Error fetching IP address:", error); // Log the actual error
         return "Unable to retrieve IP address.";
     }
 }
