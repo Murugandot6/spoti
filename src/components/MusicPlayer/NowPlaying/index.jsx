@@ -49,7 +49,6 @@ const NowPlaying = ({ close, open, nowPlaying, activeSong, currentSongs, current
                     <button
                         className="lg:block hidden text-white z-[8888]"
                         onClick={close}
-                        nowPlaying={nowPlaying}
                     >
                         <RiArrowLeftLine size={30} />
                     </button>

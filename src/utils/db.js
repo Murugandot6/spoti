@@ -5,11 +5,20 @@ const THREE_DAYS_IN_MILLISECONDS = 259200000;
 export const getIpAddress = async () => {
     try {
         const response = await fetch(import.meta.env.VITE_IP_URL);
-        const data = await response.json();
 
-        return data.ip || "Unknown IP"; // Ensure it's always a string
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const contentType = response.headers.get("content-type");
+        if (!contentType || !contentType.includes("application/json")) {
+            throw new TypeError("Expected JSON response, but received non-JSON content.");
+        }
+
+        const data = await response.json();
+        return data.ip || "Unknown IP";
     } catch (error) {
-        console.error("Error fetching IP address:", error); // Log the actual error
+        console.error("Error fetching IP address:", error);
         return "Unable to retrieve IP address.";
     }
 }
